@@ -22,8 +22,34 @@ def main():
     )
 
     while True:
-
         print(f"You have {MAX_GUESSES} guesses to get it.")
+        secret_number = getSecretNumber()
+        num_guesses = 1
+        print(secret_number)
+
+        while num_guesses <= MAX_GUESSES:
+            guess = ""
+
+            while len(guess) != NUM_DIGITS:
+                print(f"Guess #{num_guesses}")
+                guess = input("> ")
+
+            clues = getClues(guess, secret_number)
+            print(clues)
+            num_guesses += 1
+            
+            if guess == secret_number:
+                break
+
+        if num_guesses > MAX_GUESSES:
+            print("You ran out of guesses.")
+            print(f"The answer was {secret_number}")
+
+        print("Do you want to play again? (y or n)")
+        if not input("> ").lower().startswith("y"):
+            break
+        print("Thanks for playing!")
+
 
 
 def getSecretNumber():
@@ -36,8 +62,28 @@ def getSecretNumber():
         secret_number += str(numbers[i])
 
     return secret_number
+
+
+def getClues(guess, secret_num):
+    if guess == secret_num:
+        return "You got it."
+    
+    clues = []
+
+    for i in range(len(guess)):
+        if guess[i] == secret_num[i]:
+            clues.append("Fermi")
+        elif guess[i] in secret_num:
+            clues.append("Pico")
+
+    if len(clues) == 0:
+        return "Bagels"
+    else:
+        clues.sort()
+
+    return " ".join(clues)
     
 
 
 if __name__ == "__main__":
-    # main()
+    main()
